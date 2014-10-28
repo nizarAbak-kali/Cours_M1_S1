@@ -1,0 +1,67 @@
+LAB 5 : http://forge.npafi.org/#congestionControl
+-------
+
+=> TCP 
+======
+   I/ Controle de congestion 
+    -----------------------
+      1. le nom retour d'un ACk avant l'expiration du temporisateur de
+retransmission.
+      2. La surcharge des files d'attente d'un routeur.
+      3.lors d'une liaison internet non fiable (taux d'erreur binaire
+      élevé).
+      4. L'internet veut suivre une approche  de bout en bout et
+      repousser l'intellligence  aux bords du reseau .
+      => TCP préfère une signalisation de bout en bout  
+ RQ : Dans ICMP, le mécanisme source QUENCH qui notifie la source de
+ la congestion => pas utilisé en pratique (niveau 3).
+
+    II/ Algorithme de controle de gestion
+    ------------------------------------	
+	1.{ ssthresh = 5000
+	    cwind = 6000
+	    mss = 500 
+	    }
+	    
+	    cwind > ssthresh
+	    =>{
+	       cwind = 6000+500(1MSS) = 6500 octets
+	       ssthresh = 5000 octets
+	       }.
+	       -> le mecanisme s'appelle le "acroissement additif"
+	2. {
+	    ssthresh = 5000
+	    cwind = 14 000 octect = 28 segments
+	    mss = 500 octet 
+	}  
+	{
+	ssthresh = cwind/2 = 14000/2 = 7000 octets
+	cwind = 1 mss = 500octets
+	}
+	-> reduction multiplicatif
+
+	3. L'algo s'appelle "Evitement de congestion" qui implémente
+	une politique AIMP (Additive Increase Multiplicative Decrease)
+	=> l'idée augmenter lentement le debit pour ne pas trop
+	produire de congestion + réduire rapidement le débit cas de
+	congestion 
+	
+	4.  { ssthresh = 3000
+	    cwind = 500
+	    mss = 500 
+	    }
+	    - l'emetteur envoie une segement de 500 octet
+	    - en général , l'emetteur augmente cwnd pour 1 MSS chaque
+	    acquittement recu 
+	    -> cela servent à doubler cwnd chaque période RTT 
+	5. "le demrrage lent" (slow start)
+	
+	6. ssthresh = la moitie du nombre d'occtet non acquittés
+	   	    = cwnd/2  
+    III/ Débit moyen d'une connnexion TCP
+
+   soit d le débit moyen :
+   	d = 3/4 * (W*MSS)/RTT
+
+W   = taille de la fenetre au moment de la congestion 
+MSS = taille d'un segment 
