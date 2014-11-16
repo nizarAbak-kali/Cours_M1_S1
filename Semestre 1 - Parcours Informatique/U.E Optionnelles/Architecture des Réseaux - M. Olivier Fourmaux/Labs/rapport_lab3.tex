@@ -1,0 +1,112 @@
+LAB 3 Couche appli Messagerie DNS SNMP
+
+1 Messagerie 
+
+1.1 
+1. BOB-> serveur messagerie -> Alice  (-> = envoie par protocole smtp +http +un autre pour les pieces jointes)
+
+
+1.2 Service de messagerie 
+1.2.1 Config  des serveur 
+
+Commandes observees: http://www.cs.cf.ac.uk/Dave/PERL/node175.html
+
+
+HELO
+    -- Initiates a conversation with the mail server. When using this command you can specify your domain name so that the mail server knows who you are. For example, HELO mailhost2. cf.ac.uk. 
+MAIL
+    -- Indicates who is sending the mail. For example,
+
+    MAIL FROM: <dave@cs.cf.ac.uk>.
+
+    Remember this is not going to be your name -- it's the name of the person who is sending the mail message. Any returned mail will be sent back to this address.
+
+RCPT
+    -- Indicates who is recieving the mail. For example,
+
+    RCPT TO: <user@email.com>. You can indicate more than one user by issuing multiple RCPT commands.
+
+DATA
+    -- Indicates that you are about to send the text (or body) of the message. The message text must end with the following five letter sequence: "\r\n.\r\n."
+
+QUIT
+    -- Indicates that the conversation is over.
+
+EXPN
+    -- Indicates that you are using a mailing list. 
+HELP
+    -- Asks for help from the mail server. 
+NOOP
+    -- Does nothing other than get a reponse from the mail server. RSETAborts the current conversation. 
+SEND
+    -- Sends a message to a user's terminal instead of a mailbox. 
+SAML
+    -- Sends a message to a user's terminal and to a user's mailbox. 
+SOML
+    -- Sends a message to a user's terminal if they are logged on; otherwise, sends the message to the user's mailbox. 
+TURN
+    -- Reverses the role of client and server. This might be useful if the client program can also act as a server and needs to receive mail from the remote computer. 
+VRFY
+    -- Verifies the existence and user name of a given mail address. This command is not implemented in all mail servers. And it can be blocked by firewalls. 
+
+Every command will receive a reply from the mail server in the form of a three digit number followed by some text describing the reply. For example,
+
+250 OK
+
+500 Syntax error, command unrecognized.
+
+The complete list of reply codes is shown below: (you'll never see most of them if you program your mail server correctly!!)
+
+211
+    -- A system status or help reply. 
+214
+    -- Help Message. 
+220
+    -- The server is ready. 
+221
+    -- The server is ending the conversation. 
+250
+    -- The requested action was completed. 
+251
+    -- The specified user is not local, but the server will forward the mail message. 
+354
+    -- This is a reply to the DATA command. After getting this, start sending the body of the mail message, ending with "\r\n.\r\n." 
+
+CR: retour chariot
+
+2)IMF : sujet , from , to ,content type , date , messae id , version min, X-mailer , content tranfert encoding , message text
+3)c'est tres bien .
+
+1.4.1
+1. 
+
+ISSUE:
+
+POP commands to view email via a Telnet session. Should a message become stuck, it can be deleted manually by the user or administrator.
+
+SOLUTION:
+
+USER - 1st login command
+
+PASS - 2nd login command
+
+In session Commands
+
+STAT - returns total number of messages and total size
+
+LIST [message] - lists all messages or the specified message
+
+DELE - deletes the specified message
+
+TOP - returns the headers and number of lines from the message
+
+RETR - retrieves the whole message
+
+QUIT - logs out and saves any changes
+
+KEYWORDS: WM3, TELNET, POP, COMMAND
+
+
+2.
+
+

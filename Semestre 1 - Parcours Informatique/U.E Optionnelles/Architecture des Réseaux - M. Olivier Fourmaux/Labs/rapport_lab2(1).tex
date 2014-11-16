@@ -1,0 +1,275 @@
+25/09/2014
+
+lab 2
+--------------------------------------------------------------
+
+
+1.on appelle protocole applicatif ou protocole d’application tout protocole de la couche application de la pile réseau.
+
+=les protocoles applicatifs définissent :
+
+ - l’ensemble des messages échangés
+ - leur ordonnancement
+ - et les actions associées
+ =ils sont dans l’espace utilisateur, i.e. pas dans le système
+ -et reposent donc sur les autres protocoles, en particulier systèmes (TCP, UDP...)
+
+
+ Difference entre protocole utilisateurs ( http) et portocoles administratifs ( dns par exemple).
+HTTP standarise pour pouvoir plusieurs types de navigateurs.
+pas tous le sprotocoles applicatifs sont standarises, jsute les plus utilises.
+
+
+2. Navigateurs ( firefox ...)  : HTTP
+   messagerie ( thunderbird, outlook) : SMTP, pop imap
+   transfert de fichier:  FTP
+   skype utilise des protocoles proprietaires
+
+   PROTOCOLES PROPRIETAIRES
+   ------------------------
+   peer to peer utilisent des protocles proprietaires ( on ne connait pas les detailles cad la specification, ils sont pas standarisees)
+   il fo une implementation dun protocole pour quil soit standarise
+   grandes boites comme cisco ont des protocles proprie pour donner des fonctionalites avances. si c aprecie alors c standarise.
+   des protocles existent grace au reverse ingeniering, on peut cree des clients libres ainsi, ex des messageries instantanees
+   
+   ISP exemple free peut teu donner acces ftp pour avoir acces a configuration.
+
+   RSTP RTP STP: protocoles standarises pour streaming de audio et video au por voix video sur ip ( des standarises existent aussi pr cela)
+  
+3.Modele client/serveur .
+Le cleint inicie la communication. ( on regarde au niveau de udp ou tcp qui ouvre le port).                                                 
+les serveurs on se port ouvert en permanence pr attendre les messages des clients.
+un port specifie pr les protocoles les plus connus 
+ex: http port 80
+
+
+4.
+applications                  | debit                      |     tolerance a la                      | sensibilite            aux pertes  (cad accepte des pertes)              | contraintes temporelles
+                                                                  variation de debit(elastique)
+
+
+
+transfert de fichier                variable                       oui                                            non                                                  non
+
+email                               variable(qq kb/s)              oui                                            non                                                  non
+
+
+web                                 variable(qq kb/s)              oui                                            non                                                  non
+
+
+audio/video                         qq kb/s -> 1mb/s                non                                           oui ( un paquet perdu = 20ms perdus)                 oui  10ms ( on peut pas recevoir le bonjour 5mn apres)
+(bidirectionel)                     qq kb/s -> 10mb/s
+
+
+streaming                             qq kb/s -> 1mb/s             un peu                                         oui                                                   qqs secondes      
+(unidirectionel)                      qq kb/s -> 10mb/s
+pas de comunication
+
+
+jeux interactifs                       qq kb/s -> 10kb/s            non                                           oui                                                   qqs 100ms
+(en ligne)
+
+
+messagerie instantanee                    variable                   non                                               non                                                 depend
+
+
+
+
+Ex2
+--------------
+
+
+1)
+Permettre d'utiliser une machine distante en emulant son interface de controle localement.
+
+2)Informations echangees:
+
+-Infos de controle( au debut de la connexion)
+-caracteres provenant du clavier ( client)
+-caracteres destinés à l'affichage sur le terminal client
+
+3)
+contraintes de securite
+ les problmes d'heterogeneite, principalement au niveau des caracteres envoyes sur le terminal.
+Ex: unix /ms windows: ascii
+    ibm:              ebc dic
+
+C'est pr ca ke en telnet ya nVT ( network virtual terminal) comme langage  commun
+
+4)telnet utilise un echange de donees fiable donc il utilise tcp.
+  service reseau cad: tcp ou udp?
+
+------
+2.2.2
+------
+trame 1: negociation
+
+command: iac  do   supress go ahead:
+         ff   fd   03
+
+command: iac   will terminal type:
+         ff   fb    18(18 cest 24 en decimal)
+
+command:iac    will negotiate about window size
+        ff     fb   1f(31deci)
+
+command:iac    will terminal speed
+        ff     fb   20(32deci)
+
+command:iac    will remote flow control
+        ff     fb   21(32deci)
+
+
+trame 4: contient des sous options:
+- 3 octets pour dire ke c des sous options: exemple ff fa 20 (iac sb 32, 32 c terminal speed)
+- apres les options data 
+- puis 2 octets pr dire que cest la fin de loption ff f0 ( iac se)
+
+2.2.2.1 il y a des commandes d'echappement et des commandes de negociations .
+2.2.2.2 la negociation dure envirion 0.0225s 8 premieres trames environ 3ms
+
+
+2.2.3
+-----
+
+2.2.3.1 L'emission des donnes commence a la fin des negociations (trame 3)
+2.2.3.2 une transmission de données :
+
+              client -> serveur => transmission de donné au serveur 
+              serveur -> client => retour du serveur pour l'affichage
+2.2.3.3 il est merdique :
+  - envoie de données a chaque caractere tapé 
+  - 2 communication pour chaque caractère transmit vers le serveur 
+  efficacité = (données user)/(donnée envoyé sur le support physique)= 1/14(ETH)+20(IP)+32(TCP)+1=1/67=1.5%
+
+2.2.3.4 il est haut parceque on envoie carcter par caractere.
+
+2.2.3.5 que des caractère 
+
+2.2.4
+-----
+
+
+2.3 RLOGIN
+---
+
+
+.2.1  a.la demande connection du client sur le serveur (handshake)(FLAGS Startup=0x00)
+      b. Sur rlogin  le type et la vitesse du terminal ne sont pas negotieS; le client les communiquent au serveur ds la trame suivante.
+ .2.3 le login est envoye avec les info sur le terminal; ensuite le serveur inqidue que le sinfos de startup ont ete recues. ensuite le client peut envoyer le mot de passe charactere par caractere.les caracteres du mot de passe ne sont pas renvoyes.
+ la suite de la conversation  se fait pareil que telnet. deux echanges pour un caractere envoye.
+
+2.4 Protocole SSH
+-----------------
+
+2.4.2.1 Client contacte serveur par TCP sur sont port ssh . puis serveur repond par ssh.Echange des version ssh . echange des info pour algo crypt.
+
+2 toutes les comm° sont crypté
+
+3.TRANSFERT DE FICHIER
+-----------------------
+
+3.1 FTP
+--------
+
+3.1.1 Etude du RFC 959 
+-----------------------
+1. Il s'agit d'un document qui aborde tout les aspects sur ftp (histoire , terminologie, commande , description du protocol , model ftp ,mode d'emploie).
+
+2. L'architecture est une archi client/serveur .Le client initie la communication en ouvrant une connection de "controle".Puis sont déterminer les paramètres de "connections data". Les informations de controle sont dites hors bande car elles circulent dans une connection differentes que les datas.
+ 
+3. cf RFC 959 page 25 .
+
+4. 50X avec X inclut {0->+infini}
+In FTP, error recovery may involve restarting a file transfer at a
+given checkpoint.
+Transmit en NVT avec chaine explicative .
+3.1.2 Capture du ftp
+---------------------
+
+3.1.3
+1. Le client . oui ds tcp, 1er ftp pr le serveur
+2. USER et on peut voir comme arg la valeur non crypté. 
+3. PASS et peut aussi voir le pass en clair .
+4.  This command is used to find out the type of operating system at the server.
+5. PORT : determiner le port de la connection data . 
+PORT h1,h2,h3,h4,p1,p2
+where p1 and p2 are tcp port control connection.h1...h4 ip client .
+address.
+-> CONTROLE OK -> ETABLISSEMENT DATA CONNECT
+
+6. LIST : lister dossier present *
+	LIST->FTP OPEN CONNECT -> FTP-DTA data transfet -> TCP -> FTP close connect
+7. TYPE commands, which are used to
+define the way in which the data are to be represented
+	RETR command retrieve the file and lauch a transfert session .
+	
+8. Apres chaque commande transfert comme decrit ci-dessus 
+
+
+3.1.4 
+-----
+1.au resultat de la commande (fichier , res ls ).
+2. 48298 etablie lors de l'ouverture de la connection data .
+3.au niveau tcp on voit un entrelacement entre les messages de controle et de donnees
+
+3.2 Protocle SCP/SFTP
+3.2.2.
+1 scp deux connexions encapsules dans 1 seul tunnel
+1. SSH + ftp = Sftp 
+2. nan
+3. tout est crypté .
+
+3.3 Trivial FTP
+
+3.3.1 
+tftp es un protocole peut robuste pour transferer des fichiers. il se sert de udp. 
+protocole stop and wait 
+
+2)oui on voi tt.
+3)tftp se charge du control . Il transfert ces donnes par udp et non tcp . - de fonctions ( pas de ls... rename...) pas identification, protocle pr reseau lan
+
+
+4 TRAFFIC WEB 
+4.1 Exercice 
+
+ 1.
+ model non persistant
+  		client 				serveur 
+ 	1RTT	|-----init tcp-------|
+ 	2RTT	|-----get html-------|
+ 	3RTT	|-----init tcp-------|
+ 	4RTT	|-----get image------|
+ 	5RTT	|-----init tcp-------|
+ 	6RTT	|-----get image------|	
+ 	
+ 	persistant sans pipeline
+ 			client 				serveur 
+ 	1RTT	|-----init tcp-------|
+ 	2RTT	|-----get html-------|
+ 	3RTT	|-----get image------|
+ 	4RTT	|-----get image------|	
+ 	
+ 		persistant avec pipeline
+ 		client 				serveur 
+ 	1RTT	|-----init tcp----------|
+ 	2RTT	|-----get html----------|
+ 	3RTT	|-----get image1 ------>|
+ 			|-----get image2 ------>|	
+ 	 	    |<----------------------|
+ 	 	    |<----------------------|
+ 	 	
+ 	 	cache permet de raprocher le contenu http de luser
+ 	 	ou, local (client) ou reseau local
+ 	 	objets? images, video    
+ 	
+4.2 Protocole http
+4.2.2.1 oui
+4.2.2.2 hote , les accept , et le keep alive 
+.3 pipelining 
+4.2.2.4 oui  on  voi code page 
+
+
+
+
+

@@ -1,0 +1,47 @@
+TD1 ARES .
+
+18/09
+
+Binome : ZAMORANO Nicolas | ABAK-KALI Nizar 
+
+TME: 
+
+I.
+1.  Panneaux avec la listes des packets 
+     Détails des packets 
+      Panneaus de dissection des packets 
+
+2. en hexa .
+
+3. TCP 
+   ARp
+   http
+   NTP 
+   DNS
+   BROWSER
+
+4. 1303 protocole 
+
+II.
+
+II. Analyse  de trames avec wireshark
+A.
+1.
+2. tapez "ntp"
+3. cliquez sur edit coloring rules puis new->mettre le bon filtre -> puis set la couleur voulue.
+4. ntp || dns
+
+B.
+
+1. dans le filtre : ip.addr == 10.33.182.178 (rechercher un http GET) ou ip.id == 0x1798
+2. editing colorinf rules -> filtre : tcp && http 
+3.la trace est une session sur un site de gif normé xircom . 2 connexions : tcp.flags.syn
+4.Analyse -> follow tcp stream
+
+III.Presentation
+cf doc 
+
+IV. 
+ 1. filtre : HTTP
+ 2. GET
+ 3. retrouvé
